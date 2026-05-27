@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" class="custom-scroll-lock">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Horizon | Beyond Gravity</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="custom-scroll-lock">
+    <!-- Cinematic Loader Overlay -->
+    <div class="loader-overlay" id="loader">
+        <div class="loader-bg-glow"></div>
+        <canvas id="loader-canvas"></canvas>
+        <div class="loader-content">
+            <div class="loader-ring-container">
+                <div class="loader-ring outer-ring"></div>
+                <div class="loader-ring middle-ring"></div>
+                <div class="loader-ring inner-singularity"></div>
+            </div>
+            <div class="loader-text-group">
+                <div class="loader-label">SYSTEM SCAN IN PROGRESS</div>
+                <h1 class="loader-title">INITIALIZING GRAVITY FIELD</h1>
+                <div class="loader-progress-container">
+                    <div class="loader-progress-track">
+                        <div class="loader-progress-fill" id="loader-progress-bar"></div>
+                    </div>
+                    <div class="loader-progress-percentage" id="loader-progress-text">[ 00% ]</div>
+                </div>
+                <div class="loader-status-log" id="loader-log">ESTABLISHING CONFINEMENT GRID...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Immediate loader script to handle progress and fade out
+        (function() {
+            const progressBar = document.getElementById("loader-progress-bar");
+            const progressText = document.getElementById("loader-progress-text");
+            const loaderLog = document.getElementById("loader-log");
+            const loader = document.getElementById("loader");
+            
+            const logs = [
+                "ESTABLISHING CONFINEMENT GRID...",
+                "CALIBRATING VOLUMETRIC METRICS...",
+                "SYNCHRONIZING SPACETIME CORE...",
+                "INITIALIZING GRAVITY FIELD...",
+                "SYSTEM NOMINAL. ENTRY GRANTED."
+            ];
+            
+            let progress = 0;
+            const duration = 2800; // Simulated loading time (2.8 seconds)
+            const intervalTime = 30;
+            const steps = duration / intervalTime;
+            const stepIncrement = 100 / steps;
+            
+            const updateLoader = () => {
+                progress += stepIncrement;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loaderInterval);
+                    
+                    progressBar.style.width = "100%";
+                    progressText.innerText = "[ 100% ]";
+                    loaderLog.innerText = logs[logs.length - 1];
+                    
+                    // Fade out loader after a small success pause
+                    setTimeout(() => {
+                        loader.classList.add("fade-out");
+                        // Allow scrolling once loaded
+                        document.documentElement.classList.remove("custom-scroll-lock");
+                        document.body.classList.remove("custom-scroll-lock");
+                    }, 500);
+                } else {
+                    progressBar.style.width = progress + "%";
+                    progressText.innerText = "[ " + Math.floor(progress).toString().padStart(2, '0') + "% ]";
+                    
+                    // Change status logs based on progress thresholds
+                    const logIndex = Math.min(Math.floor((progress / 100) * logs.length), logs.length - 1);
+                    loaderLog.innerText = logs[logIndex];
+                }
+            };
+            
+            const loaderInterval = setInterval(updateLoader, intervalTime);
+            
+            // Background Canvas Particles for Loader
+            const canvas = document.getElementById("loader-canvas");
+            if (canvas) {
+                const ctx = canvas.getContext("2d");
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                };
+                resize();
+                window.addEventListener("resize", resize);
+                
+                const particles = [];
+                const count = 40;
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        r: Math.random() * 1.0 + 0.5,
+                        speed: Math.random() * 0.18 + 0.04,
+                        opacity: Math.random() * 0.45 + 0.1
+                    });
+                }
+                
+                const draw = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.fillStyle = "#ffffff";
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    
+                    for (let p of particles) {
+                        ctx.globalAlpha = p.opacity;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // Drift particles slowly towards the center (gravitational pull feeling)
+                        const dx = centerX - p.x;
+                        const dy = centerY - p.y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist > 15) {
+                            p.x += (dx / dist) * p.speed;
+                            p.y += (dy / dist) * p.speed;
+                        } else {
+                            // Reset particle to edges when it reaches center/singularity
+                            const angle = Math.random() * Math.PI * 2;
+                            const r = Math.max(canvas.width, canvas.height) / 2;
+                            p.x = centerX + Math.cos(angle) * r;
+                            p.y = centerY + Math.sin(angle) * r;
+                        }
+                    }
+                    requestAnimationFrame(draw);
+                };
+                draw();
+            }
+        })();
+    </script>
+    <video class="hero-video" src="Black_hole_floating_deep_space_202605262326.mp4" autoplay muted loop playsinline></video>
+    <div class="video-overlay"></div>
+    <div class="scroll-dim-overlay"></div>
+    <div class="atmospheric-fog-warm"></div>
+    <div class="atmospheric-fog-cool"></div>
+    <div class="space-dust dust-1"></div>
+    <div class="space-dust dust-2"></div>
+    <div class="space-dust dust-3"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Foreground Atmospheric Depth Layers -->
+    <div class="atmosphere-layers">
+        <div class="atmosphere-layer-wrapper parallax" data-speed="3">
+            <div class="atmosphere-layer layer-1"></div>
+        </div>
+        <div class="atmosphere-layer-wrapper parallax" data-speed="4.5">
+            <div class="atmosphere-layer layer-2"></div>
+        </div>
+    </div>
+
+    <!-- Top Nav (Fixed) -->
+    <header class="header animate-up">
+        <div class="logo-group">
+            <div class="logo-icon glow-hover"></div>
+            <span class="logo-text">Event Horizon</span>
+        </div>
+        
+        <nav class="main-nav">
+            <a href="#hero" class="glow-text">HOME</a>
+            <a href="#discover" class="glow-text">DISCOVER</a>
+            <a href="#simulations" class="glow-text">SIMULATIONS</a>
+            <a href="#about" class="glow-text">ABOUT</a>
+        </nav>
+        
+        <div class="header-action">
+            <div class="pulse-icon glow-hover">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M3 12h4l3-8 5 16 3-8h3" />
+                </svg>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section 1: Hero Section (Fullscreen) -->
+    <div class="hero-section" id="hero">
+        <!-- Main Center Left Content -->
+        <main class="hero-content parallax" data-speed="1.5">
+            <p class="subtitle animate-up">EXPLORE THE UNKNOWN</p>
+            <h1 class="title animate-up">BEYOND<br>GRAVITY</h1>
+            <p class="description animate-up">An interactive journey into the mysteries<br>of black holes and the fabric of space.</p>
+            
+            <div class="cta-group animate-up">
+                <span class="cta-text">START EXPLORING</span>
+                <button class="cta-btn glow-hover">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </main>
+
+        <!-- Right Side Pagination -->
+        <div class="pagination animate-up parallax" data-speed="0.5">
+            <span class="dot active glow-hover" data-target="hero"></span>
+            <span class="dot glow-hover" data-target="discover"></span>
+            <span class="dot glow-hover" data-target="simulations"></span>
+            <span class="dot glow-hover" data-target="about"></span>
+        </div>
+
+        <!-- Bottom Footer -->
+        <footer class="footer animate-up">
+            <div class="social-links">
+                <a href="#" class="glow-text">TWITTER</a>
+                <a href="#" class="glow-text">INSTAGRAM</a>
+                <a href="#" class="glow-text">YOUTUBE</a>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span class="scroll-text">SCROLL</span>
+                <div class="scroll-line"></div>
+            </div>
+            
+            <div class="realtime-card parallax" data-speed="2" id="realtime-card">
+                <div class="card-icon glow-hover"></div>
+                <div class="card-text">
+                    <span class="card-label">REALTIME VIEW</span>
+                    <span class="card-title">Gravity Simulation</span>
+                </div>
+                <div class="card-arrow glow-text">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SideNavBar (Section 2 Specific) -->
+    <aside class="eh-sidebar">
+        <div class="eh-sidebar-items">
+            <a href="#singularity" class="eh-sidebar-item active">
+                <span class="material-symbols-outlined eh-sidebar-icon">radio_button_checked</span>
+                <span class="eh-sidebar-label">Singularity</span>
+            </a>
+            <a href="#dilation" class="eh-sidebar-item">
+                <span class="material-symbols-outlined eh-sidebar-icon">radio_button_unchecked</span>
+                <span class="eh-sidebar-label">Time Dilation</span>
+            </a>
+            <a href="#lensing" class="eh-sidebar-item">
+                <span class="material-symbols-outlined eh-sidebar-icon">radio_button_unchecked</span>
+                <span class="eh-sidebar-label">Lensing</span>
+            </a>
+            <a href="#discover" class="eh-sidebar-item">
+                <span class="material-symbols-outlined eh-sidebar-icon">radio_button_unchecked</span>
+                <span class="eh-sidebar-label">Horizon</span>
+            </a>
+        </div>
+        <div class="eh-sidebar-profile">
+            <div class="eh-profile-avatar">
+                <img alt="Research Lead" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJycB47BXK8H3Q7Gx1YxLfxUkr7F9-sXx_ut2rjLzUYgtq5-wH3TVQrdddi-tfjTjdCtsVnGovYRT3W31T1Dz7Hg3pp2spZWGpflaBaDvhSDbUlF2O_2RWIUbUeIKOxCe5bV8hYWvRB7ncTS3gxNbja5nWIBkmtGV0joXwNCVJ9JEHgG1n5mxdmD_9gI3XL1Tmz-n8ZZNZYl8iyw_M-v4NS7ibzCRyDQiL7HiiQ0xXOyD1eTkNsU1YHjQapWNK0WxTUVXi89SlkISK"/>
+            </div>
+            <p class="eh-profile-name">Gargantua I</p>
+        </div>
+    </aside>
+
+    <!-- Section 2: Inside the Event Horizon -->
+    <section class="event-horizon-section" id="discover">
+        <!-- Volumetric Background Glow -->
+        <div class="volumetric-glow"></div>
+        <div class="event-horizon-grid">
+            <!-- Left Side: Sticky Content -->
+            <div class="event-horizon-left reveal-item">
+                <span class="eh-label">Research Sector 02</span>
+                <h2 class="eh-title">
+                    INSIDE THE <br/>
+                    <span class="eh-title-accent">EVENT HORIZON</span>
+                </h2>
+                <p class="eh-desc">
+                    Beyond the threshold of no return, the fundamental laws of physics begin to unravel. Within this gravitational prison, spacetime is woven into a singular point of infinite density, distorting reality into a cinematic display of light and shadow.
+                </p>
+                <div class="eh-telemetry">
+                    <div class="eh-telemetry-line"></div>
+                    <span class="eh-telemetry-text">Telemetry Active</span>
+                    <div class="eh-telemetry-dot"></div>
+                </div>
+            </div>
+
+            <!-- Right Side: Asymmetrical Panels -->
+            <div class="event-horizon-panels">
+                <!-- Panel 1: Singularity -->
+                <div class="eh-panel-wrapper eh-panel-1-pos reveal-item reveal-delay-1" id="singularity">
+                    <div class="eh-panel eh-float-1">
+                        <div class="eh-panel-header">
+                            <span class="material-symbols-outlined eh-panel-icon" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+                            <span class="eh-panel-ref">REF: 001</span>
+                        </div>
+                        <div class="eh-panel-body">
+                            <h3 class="eh-panel-title">Singularity</h3>
+                            <p class="eh-panel-desc">The core of the black hole where curvature becomes infinite. A rupture in the fabric of existence.</p>
+                        </div>
+                        <div class="eh-panel-footer">
+                            <span class="eh-panel-integrity">Data Integrity: 99.8%</span>
+                            <span class="material-symbols-outlined eh-panel-arrow">arrow_forward</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 2: Time Dilation -->
+                <div class="eh-panel-wrapper eh-panel-2-pos reveal-item reveal-delay-2" id="dilation">
+                    <div class="eh-panel eh-float-2">
+                        <div class="eh-panel-header">
+                            <span class="material-symbols-outlined eh-panel-icon">slow_motion_video</span>
+                            <span class="eh-panel-ref">REF: 002</span>
+                        </div>
+                        <div class="eh-panel-body">
+                            <h3 class="eh-panel-title">Time Dilation</h3>
+                            <p class="eh-panel-desc">Relativistic effects causing time to stretch. Minutes at the horizon equate to decades in orbit.</p>
+                        </div>
+                        <div class="eh-panel-footer">
+                            <div class="eh-panel-dots">
+                                <span class="eh-mini-dot active"></span>
+                                <span class="eh-mini-dot"></span>
+                                <span class="eh-mini-dot"></span>
+                            </div>
+                            <span class="eh-panel-integrity">Active Phase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel 3: Gravitational Lensing -->
+                <div class="eh-panel-wrapper eh-panel-3-pos reveal-item reveal-delay-3" id="lensing">
+                    <div class="eh-panel eh-float-3">
+                        <div class="eh-panel-header">
+                            <span class="material-symbols-outlined eh-panel-icon">blur_circular</span>
+                            <span class="eh-panel-ref">REF: 003</span>
+                        </div>
+                        <div class="eh-panel-body">
+                            <h3 class="eh-panel-title">Gravitational Lensing</h3>
+                            <p class="eh-panel-desc">Photons bending around massive gravity wells, creating a halo of warped celestial light.</p>
+                        </div>
+                        <div class="eh-panel-footer-progress">
+                            <div class="eh-progress-bar">
+                                <div class="eh-progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SideNavBar (Section 3 Specific) -->
+    <aside class="sim-sidebar">
+        <div class="sim-sidebar-header">
+            <div class="sim-sidebar-label">SECTOR CONTROL</div>
+            <div class="sim-sidebar-coords">COORD: 001-BHK</div>
+        </div>
+        <div class="sim-sidebar-items">
+            <div class="sim-sidebar-item active">
+                <span class="material-symbols-outlined">radar</span>
+                <span class="sim-item-text">SECTOR ALPHA</span>
+            </div>
+            <div class="sim-sidebar-item">
+                <span class="material-symbols-outlined">brightness_high</span>
+                <span class="sim-item-text">SINGULARITY</span>
+            </div>
+            <div class="sim-sidebar-item">
+                <span class="material-symbols-outlined">cyclone</span>
+                <span class="sim-item-text">ERGOSPHERE</span>
+            </div>
+            <div class="sim-sidebar-item">
+                <span class="material-symbols-outlined">grain</span>
+                <span class="sim-item-text">ACCRETION</span>
+            </div>
+            <div class="sim-sidebar-item">
+                <span class="material-symbols-outlined">emergency_home</span>
+                <span class="sim-item-text">VOID</span>
+            </div>
+        </div>
+        <div class="sim-sidebar-footer">
+            <button class="sim-encrypted-btn">ENCRYPTED LINK</button>
+        </div>
+    </aside>
+
+    <!-- Section 3: Gravity Simulation -->
+    <section class="simulation-section" id="simulations">
+        <!-- Volumetric Background Light (Accretion Disk style) -->
+        <div class="sim-bg-glow"></div>
+        
+        <!-- Centered Heading -->
+        <div class="sim-heading reveal-item">
+            <div class="sim-module-label">
+                <span class="sim-label-line"></span>
+                <span class="sim-label-text">Active Research Module</span>
+                <span class="sim-label-line"></span>
+            </div>
+            <h2 class="sim-title">GRAVITY SIMULATION</h2>
+        </div>
+
+        <!-- Simulation Core -->
+        <div class="sim-core-container reveal-item reveal-delay-2">
+            <!-- Intense Background Glow -->
+            <div class="sim-accretion-glow animate-pulse-glow"></div>
+            <!-- Orbital Rings -->
+            <div class="orbit-ring orbit-ring-1 animate-rotate-cw"></div>
+            <div class="orbit-ring orbit-ring-2 animate-rotate-ccw"></div>
+            <div class="orbit-ring orbit-ring-3 animate-rotate-cw"></div>
+            <!-- The Singularity Core -->
+            <div class="sim-singularity-core animate-core-glow">
+                <div class="sim-grid-lines"></div>
+                <div class="sim-core-inner-glow animate-pulse"></div>
+                <div class="sim-core-text">Stable Singularity</div>
+            </div>
+        </div>
+
+        <!-- Left UI: Gravitational Metrics -->
+        <section class="sim-ui-left reveal-item reveal-delay-1">
+            <div class="sim-glass-panel sim-metrics-card">
+                <div class="sim-card-header">
+                    <span class="sim-card-title">GRAVITATIONAL METRICS</span>
+                    <span class="sim-status-dot-pulse"></span>
+                </div>
+                <div class="sim-metrics-list">
+                    <div class="sim-metric-item">
+                        <div class="sim-metric-info">
+                            <span>TIME DILATION</span>
+                            <span class="sim-metric-val" id="time-dilation-val">1.44x</span>
+                        </div>
+                        <div class="sim-progress-track">
+                            <div class="sim-progress-fill" style="width: 72%;"></div>
+                        </div>
+                    </div>
+                    <div class="sim-metric-item">
+                        <div class="sim-metric-info">
+                            <span>SPACETIME CURVE</span>
+                            <span class="sim-metric-val">0.0084 κ</span>
+                        </div>
+                        <div class="sim-progress-track">
+                            <div class="sim-progress-fill" style="width: 44%;"></div>
+                        </div>
+                    </div>
+                    <div class="sim-metric-item">
+                        <div class="sim-metric-info">
+                            <span>LENSING INTENSITY</span>
+                            <span class="sim-metric-val">92.4%</span>
+                        </div>
+                        <div class="sim-progress-track">
+                            <div class="sim-progress-fill" style="width: 92%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sim-glass-panel sim-trajectory-card">
+                <div class="sim-small-label">Vector Trajectory</div>
+                <div class="sim-bar-chart">
+                    <div class="sim-bar" style="height: 50%;"></div>
+                    <div class="sim-bar" style="height: 66%;"></div>
+                    <div class="sim-bar" style="height: 100%;"></div>
+                    <div class="sim-bar" style="height: 75%;"></div>
+                    <div class="sim-bar" style="height: 33%;"></div>
+                    <div class="sim-bar" style="height: 25%;"></div>
+                    <div class="sim-bar" style="height: 80%;"></div>
+                    <div class="sim-bar" style="height: 66%;"></div>
+                    <div class="sim-bar" style="height: 50%;"></div>
+                    <div class="sim-bar" style="height: 75%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Right UI: Orbital Readings -->
+        <section class="sim-ui-right reveal-item reveal-delay-3">
+            <div class="sim-glass-panel sim-readings-card">
+                <div class="sim-card-header-simple">Orbital Readings</div>
+                <div class="sim-readings-grid">
+                    <div class="sim-reading-item">
+                        <span class="sim-reading-label">AXIS-X</span>
+                        <span class="sim-reading-val">451.98</span>
+                    </div>
+                    <div class="sim-reading-item">
+                        <span class="sim-reading-label">AXIS-Y</span>
+                        <span class="sim-reading-val">-12.04</span>
+                    </div>
+                    <div class="sim-reading-item">
+                        <span class="sim-reading-label">AXIS-Z</span>
+                        <span class="sim-reading-val">882.33</span>
+                    </div>
+                    <div class="sim-reading-item">
+                        <span class="sim-reading-label">VELOCITY</span>
+                        <span class="sim-reading-val accent">0.88c</span>
+                    </div>
+                </div>
+                <div class="sim-readings-footer">
+                    <div class="sim-footer-row">
+                        <span>FLUX VARIANCE</span>
+                        <span class="accent">Low</span>
+                    </div>
+                    <div class="sim-footer-row">
+                        <span>STABILITY</span>
+                        <span class="accent">Nominal</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sim-glass-panel sim-sync-card">
+                <div class="sim-sync-grid-container">
+                    <div class="sim-sync-grid-lines">
+                        <div class="sim-grid-line-h"></div>
+                        <div class="sim-grid-line-v"></div>
+                        <div class="sim-grid-ping"></div>
+                        <div class="sim-grid-center-box"></div>
+                        <span class="sim-grid-caption">Grid:Lock-00</span>
+                    </div>
+                </div>
+                <div class="sim-sync-status">Syncing Coordinate Matrix...</div>
+            </div>
+        </section>
+
+        <!-- Bottom Left: System Log -->
+        <section class="sim-ui-log reveal-item reveal-delay-3">
+            <div class="sim-glass-panel sim-log-card">
+                <div class="sim-log-header">
+                    <div class="sim-log-status">
+                        <span class="sim-log-pulse-dot"></span>
+                        <span>System Status: Nominal</span>
+                    </div>
+                    <span class="sim-log-ref">Log-BHK-8</span>
+                </div>
+                <div class="sim-log-feed" id="log-feed">
+                    <div class="log-line opacity-30">[00:00:01] Initializing gravity core components...</div>
+                    <div class="log-line text-orange">[00:00:02] Establishing connection to Sector Alpha...</div>
+                    <div class="log-line opacity-30">[00:00:04] Lensing intensity verified at 92.4%</div>
+                    <div class="log-line opacity-30">[00:00:05] Background flux variance within tolerances...</div>
+                    <div class="log-line opacity-30">[00:00:08] Tracking trajectory delta-V: 0.12km/s</div>
+                    <div class="log-line text-orange-bright">[00:00:10] MISSION COMMANDER: Singularity stable.</div>
+                    <div class="log-line opacity-30">[00:00:12] Auto-diagnostics phase 1 complete...</div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <!-- Section 4: About Section (Quiet Void) -->
+    <section class="about-section" id="about">
+        <div class="about-glow"></div>
+        <div class="about-content">
+            <span class="about-label reveal-item">Horizon Archive</span>
+            <h2 class="about-title reveal-item reveal-delay-1">THE SILENT VOID</h2>
+            <div class="about-text">
+                <p class="about-para reveal-item reveal-delay-2">Beyond the threshold of the event horizon lies a space where time ceases to flow, light bends into infinite curves, and the universe falls quiet.</p>
+                <p class="about-para text-dim reveal-item reveal-delay-3">This is the edge of gravity. The boundary of the known. The beginning of silence.</p>
+            </div>
+            <div class="about-coordinates reveal-item reveal-delay-3">
+                <span>COORD: 000-VOID</span>
+                <span class="pulse-indicator"></span>
+            </div>
+            <!-- Minimal CTA Ending -->
+            <div class="about-cta reveal-item reveal-delay-3">
+                <button class="about-cta-btn glow-hover" onclick="if(window.smoothScrollTo){window.smoothScrollTo(0)}else{window.scrollTo({top:0,behavior:'smooth'})}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 19V5M5 12l7-7 7 7" />
+                    </svg>
+                </button>
+                <span class="about-cta-text">RESET SPACE-TIME</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Footer -->
+    <footer class="global-footer reveal-item reveal-delay-1">
+        <div class="global-footer-container">
+            <div class="global-footer-copy">
+                &copy; 2026 EVENT HORIZON ASTROPHYSICS. ALL RIGHTS RESERVED.
+            </div>
+            <div class="global-footer-links">
+                <a class="glow-text" href="#">Telemetry</a>
+                <a class="glow-text" href="#">Legal</a>
+                <a class="glow-text" href="#">Archive</a>
+                <span class="global-footer-divider"></span>
+                <div class="global-footer-status">
+                    <span class="global-status-dot"></span>
+                    SYSTEMS_NOMINAL
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
