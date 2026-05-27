@@ -38,21 +38,61 @@ document.addEventListener("DOMContentLoaded", () => {
         // Lower density on mobile to reduce GPU load
         const density = isMobile ? 40000 : 20000;
         const numberOfParticles = Math.floor((window.innerWidth * window.innerHeight) / density);
+        
+        let simSwirl = 0; // Tracks Section 3 gravitational swirl active factor (0 to 1)
 
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
                 this.size = Math.random() * 1.5 + 0.5;
-                // Slower movement on mobile for lower motion feel, globally reduced
-                const speedMultiplier = isMobile ? 0.15 : 0.3;
+                // Slower base movement for premium cinematic drift
+                const speedMultiplier = isMobile ? 0.12 : 0.22;
                 this.speedX = Math.random() * speedMultiplier - (speedMultiplier / 2);
                 this.speedY = Math.random() * speedMultiplier - (speedMultiplier / 2);
-                this.opacity = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random() * 0.45 + 0.1;
             }
             update() {
+                // If Section 3 (Simulation) is active, apply accretion disk orbital pull
+                if (simSwirl > 0.05 && !isMobile) {
+                    const centerX = canvas.width / 2;
+                    const centerY = canvas.height / 2;
+                    const dx = centerX - this.x;
+                    const dy = centerY - this.y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dist > 30) {
+                        // Soft gravitational pull towards singularity
+                        const pullForce = 0.022 * simSwirl;
+                        this.speedX += (dx / dist) * pullForce;
+                        this.speedY += (dy / dist) * pullForce;
+                        
+                        // Perpendicular orbit velocity (accretion disc swirl)
+                        const orbitForce = 0.08 * simSwirl;
+                        this.speedX += (-dy / dist) * orbitForce;
+                        this.speedY += (dx / dist) * orbitForce;
+                    }
+                }
+                
+                // Speed clamping to prevent runaway acceleration from gravity
+                const maxSpeed = isMobile ? 0.6 : 1.2;
+                const currentSpeed = Math.sqrt(this.speedX*this.speedX + this.speedY*this.speedY);
+                if (currentSpeed > maxSpeed) {
+                    this.speedX = (this.speedX / currentSpeed) * maxSpeed;
+                    this.speedY = (this.speedY / currentSpeed) * maxSpeed;
+                }
+                
+                // Apply physics movement
                 this.x += this.speedX;
                 this.y += this.speedY;
+                
+                // Base slow drift recovery (acts as friction when exiting simulation)
+                this.speedX *= 0.985;
+                this.speedY *= 0.985;
+                
+                // Add micro-noise fluctuations for organic, fluid-like movement
+                this.speedX += (Math.random() * 0.015 - 0.0075);
+                this.speedY += (Math.random() * 0.015 - 0.0075);
                 
                 if (this.x < 0) this.x = canvas.width;
                 if (this.x > canvas.width) this.x = 0;
@@ -128,6 +168,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleScroll = () => {
         const scrollY = window.scrollY;
         const viewportHeight = window.innerHeight || 800;
+
+        // Calculate Section 3 active swirl progress
+        const simStart = viewportHeight * 1.2;
+        const simEnd = viewportHeight * 2.5;
+        if (scrollY >= simStart && scrollY <= simEnd) {
+            const peak = viewportHeight * 1.9;
+            if (scrollY < peak) {
+                simSwirl = (scrollY - simStart) / (peak - simStart);
+            } else {
+                simSwirl = 1.0 - ((scrollY - peak) / (simEnd - peak));
+            }
+        } else {
+            simSwirl = 0;
+        }
 
         // Navbar scrolled state transition
         if (header) {
@@ -407,8 +461,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let isAnimating = false;
 
         // Custom parameters to make scrolling feel slower, heavier, and cinematic
-        const scrollSpeedMultiplier = 0.75; // Slower, heavier distance response per tick
-        const scrollEase = 0.04; // Cinematic drift deceleration factor
+        const scrollSpeedMultiplier = 0.65; // Slower, heavier distance response per tick
+        const scrollEase = 0.035; // Cinematic drift deceleration factor
 
         const updateScroll = () => {
             if (isMobile) {
