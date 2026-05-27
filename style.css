@@ -564,17 +564,87 @@ body {
     }
     
     .header {
-        padding: 24px 24px;
+        padding: 20px 24px;
+        justify-content: center; /* Center logo on mobile */
     }
     
     .header.scrolled {
         padding: 12px 24px;
     }
+
+    .main-nav {
+        display: none !important; /* Hide main nav to prevent overlap and maintain luxury minimalism */
+    }
+
+    .header-action {
+        display: none !important; /* Hide diagnostic action icon on mobile */
+    }
     
     .hero-section {
-        padding: 100px 24px 48px 24px;
+        padding: 120px 24px 60px 24px;
         height: auto;
         min-height: 100vh;
+        grid-template-areas: 
+            "content"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        gap: 40px;
+    }
+
+    .hero-content {
+        align-items: center;
+        text-align: center;
+        padding: 0;
+    }
+
+    .title {
+        font-size: 38px; /* scaled down from 100px to prevent viewport overflow */
+        letter-spacing: 0.12em;
+        line-height: 1.25;
+        margin-bottom: 24px;
+    }
+
+    .subtitle {
+        font-size: 9px;
+        letter-spacing: 0.28em;
+        margin-bottom: 16px;
+    }
+
+    .description {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 40px;
+        max-width: 320px;
+    }
+
+    .pagination {
+        display: none !important; /* Hide side dots on mobile to maximize white space */
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        width: 100%;
+        position: relative;
+    }
+
+    .social-links {
+        gap: 24px;
+        padding-bottom: 0;
+    }
+
+    .scroll-indicator {
+        display: none !important; /* Hide scroll lines on mobile to clean up space */
+    }
+
+    .realtime-card {
+        width: 100%;
+        max-width: 320px;
+        justify-content: center;
+        border-radius: 12px;
+        padding: 12px 20px;
     }
 }
 
@@ -1204,6 +1274,37 @@ body {
     
     .global-footer-container {
         padding: 32px 24px;
+    }
+
+    /* Section 2 Mobile Polish */
+    .eh-title {
+        font-size: 28px;
+        margin-top: 12px;
+    }
+
+    .eh-desc {
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .eh-panel {
+        padding: 24px;
+        gap: 16px;
+    }
+
+    .eh-panel-title {
+        font-size: 13px;
+    }
+
+    .eh-panel-desc {
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* Keep interactive arrow visible on touch screens where hover is unavailable */
+    .eh-panel-arrow {
+        opacity: 0.8;
+        transform: translateX(0);
     }
 }
 
@@ -2339,6 +2440,83 @@ body.custom-scroll-lock {
 .about-cta:hover .about-cta-text {
     color: var(--primary-orange);
 }
+
+/* Dedicated Mobile Viewports (max-width: 480px) */
+@media (max-width: 480px) {
+    /* Loader Responsive Optimizations */
+    .loader-title {
+        font-size: 13px !important;
+        letter-spacing: 0.22em !important;
+    }
+    .loader-label {
+        font-size: 8px !important;
+        letter-spacing: 0.25em !important;
+    }
+    .loader-progress-track {
+        width: 160px !important;
+    }
+
+    /* Section 3 Gravity Simulation Core Resizing */
+    .sim-core-container {
+        width: 250px !important;
+        height: 250px !important;
+    }
+    
+    .sim-accretion-glow {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .orbit-ring-1 { width: 245px !important; height: 245px !important; }
+    .orbit-ring-2 { width: 200px !important; height: 200px !important; }
+    .orbit-ring-3 { width: 160px !important; height: 160px !important; }
+    
+    .sim-singularity-core {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .sim-core-inner-glow {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .sim-core-text {
+        font-size: 8px !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    .sim-heading {
+        margin-bottom: 20px !important;
+    }
+
+    .sim-title {
+        font-size: 22px !important;
+        letter-spacing: 0.25em !important;
+    }
+
+    /* Section 4 Silent Void Typo Resizing */
+    .about-title {
+        font-size: 24px !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    .about-para {
+        font-size: 13px !important;
+        line-height: 1.65 !important;
+    }
+
+    .about-cta-btn {
+        width: 52px !important;
+        height: 52px !important;
+    }
+
+    .about-cta-btn svg {
+        width: 16px !important;
+        height: 16px !important;
+    }
+}
+
 
 
 
